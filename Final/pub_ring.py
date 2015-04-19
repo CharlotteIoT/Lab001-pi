@@ -10,7 +10,7 @@ GPIO.setup(24, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 while True:
     if GPIO.input(24) == 1:
         print("front button pressed")
-        publish.single("protosystemdemo/door/1/ring", "", hostname="test.mosquitto.org")
+        publish.single("protosystem/door/1/ring", "", hostname="test.mosquitto.org")
         time.sleep(2)
 
 GPIO.cleanup()
