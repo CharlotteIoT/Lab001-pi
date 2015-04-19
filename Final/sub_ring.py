@@ -1,6 +1,8 @@
 import paho.mqtt.client as mqtt
 import subprocess
 
+mode = 'unknown'
+
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, rc):
 	print("Connected with result code "+str(rc))
@@ -12,8 +14,12 @@ def on_connect(client, userdata, rc):
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
 	print(msg.topic+" "+str(msg.payload))
-	filenamering1 = r'../Media/doorbell-1.wav'
-	subprocess.Popen([ "/usr/bin/aplay", '-q', filenamering1 ] )	
+	if '/ring' in msg.topic:
+		filenamering1 = r'../Media/doorbell-1.wav'
+		subprocess.Popen([ "/usr/bin/aplay", '-q', filenamering1 ] )	
+	if '/mode' in msg.topic:
+		mode=msg.payload
+		print(mode)
 
 client = mqtt.Client()
 client.on_connect = on_connect
