@@ -15,8 +15,10 @@ def on_connect(client, userdata, rc):
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
 	global mode
-	print mode
 	print(msg.topic+" "+str(msg.payload))
+	if '/mode' in msg.topic:
+		mode=str(msg.payload)
+		print mode
 	if '/ring' in msg.topic:
 		if mode == 'stay':
 			print('silent doorbell')
@@ -27,9 +29,6 @@ def on_message(client, userdata, msg):
 			time.sleep(2)
 			filenamering1 = r'../Media/dog_bark4.wav'
 			subprocess.Popen([ "/usr/bin/aplay", '-q', filenamering1 ] )	
-	if '/mode' in msg.topic:
-		mode=str(msg.payload)
-		print mode
 
 client = mqtt.Client()
 client.on_connect = on_connect
